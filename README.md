@@ -1,24 +1,34 @@
-# 🧼 MetaWiper – Metadata Viewer & Shredder
+# MetaWiper - Image Metadata Viewer and Shredder
 
-MetaWiper is a powerful and user-friendly tool built with Streamlit that allows users to analyze and strip metadata from image files. It helps ensure privacy by detecting embedded EXIF information and securely removing it.
+MetaWiper is a simple yet powerful web application built with Streamlit that allows you to view and remove metadata (EXIF) from your images. Protect your privacy by ensuring no hidden data is left in your images before sharing them online.
 
-## 🔍 Features
-- View detailed metadata of uploaded images
-- Detect GPS, device info, timestamps, and more
-- Clean/strip metadata from images instantly
-- Hash calculation (SHA-256)
-- Modern UI with dark mode compatibility
-- Responsive design with animation effects
+## ✨ Features
 
-## 🛠️ Built With
-- Python
-- Streamlit
-- Pillow
+- **View Image Metadata:** Upload an image to view its detailed EXIF metadata, including camera settings, location information, and more.
+- **Remove Metadata:** Strip all metadata from your images with a single click to protect your privacy.
+- **Download Clean Images:** Download the cleaned image without the metadata.
+- **Secure:** The entire process is done in your browser, and your images are not uploaded to any server.
+- **Supported Formats:** Supports popular image formats like JPEG, PNG, WebP, and more.
+- **User-Friendly Interface:** A simple and intuitive interface built with Streamlit.
 
-## 🚀 Getting Started
+## 🚀 How to Use
 
-```bash
-git clone https://github.com/rootsecops/metawiper.git
-cd metawipe
-pip install -r requirements.txt
-streamlit run app.py
+1. **Upload an Image:** Drag and drop an image file into the upload box, or click to select a file from your computer.
+2. **View Metadata:** The application will display the image and its metadata.
+3. **Remove Metadata:** Click the "Strip Metadata & Prepare Clean Image" button to remove the metadata.
+4. **Download Clean Image:** Click the "Download Clean Image" button to save the cleaned image to your computer.
+
+## 🛠️ Technologies Used
+
+- **Python:** The core programming language.
+- **Streamlit:** The web framework for building the application.
+- **Pillow:** A powerful image processing library for Python.
+- **piexif:** A Python library for reading and writing EXIF data.
+
+## 📸 Screenshots
+
+*(Coming Soon)*
+
+## 📄 License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
