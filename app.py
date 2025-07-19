@@ -11,7 +11,7 @@ from utils.metadata_tools import (
 )
 
 st.set_page_config(
-    page_title="MetaWipe – Metadata Viewer & Shredder",
+    page_title="MetaWiper",
     page_icon="assests/favicon.ico",
     layout="centered"
 )
@@ -55,7 +55,7 @@ st.markdown("""
 """, unsafe_allow_html=True)
 
 # --- App Title ---
-st.markdown("## MetaWipe – Metadata Viewer & Shredder")
+st.markdown("## MetaWiper – Metadata Viewer & Shredder")
 st.markdown("<p style='text-align:center;'>Protect your privacy by removing hidden metadata (Exif) from images before sharing.</p>", unsafe_allow_html=True)
 
 # --- File Upload UI ---
