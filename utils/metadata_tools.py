@@ -13,7 +13,11 @@ def extract_exif(image: Image.Image) -> dict:
     try:
         exif_data = image.info.get("exif")
         if exif_data:
-            return piexif.load(exif_data)
+            loaded_exif = piexif.load(exif_data)
+            if isinstance(loaded_exif, dict):
+                return loaded_exif
+            else:
+                return {"Error": "Invalid EXIF data."}
         elif "png" in image.format.lower():
             return {"PNG Info": image.info}
         else:

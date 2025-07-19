@@ -91,8 +91,11 @@ if uploaded_file is not None:
                 if tags:
                     has_data = True
                     with st.expander(f"📂 {section}"):
-                        for k, v in tags.items():
-                            st.markdown(f"- **{k}**: {v}")
+                        if isinstance(tags, dict):
+                            for k, v in tags.items():
+                                st.markdown(f"- **{k}**: {v}")
+                        else:
+                            st.markdown(f"- {tags}")
             if not has_data:
                 st.info("No visible metadata found in this image.")
         else:
