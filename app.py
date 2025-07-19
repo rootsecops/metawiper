@@ -11,7 +11,7 @@ from utils.metadata_tools import (
 )
 
 st.set_page_config(
-    page_title="MetaWiper|Metadata Viewer & Shredder",
+    page_title="MetaWiper | Metadata Viewer & Shredder",
     page_icon="assests/favicon.ico",
     layout="centered"
 )
