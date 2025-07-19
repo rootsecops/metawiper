@@ -1,37 +1,46 @@
 import piexif
-from PIL import Image
+from PIL import Image, PngImagePlugin, TiffImagePlugin
 import hashlib
 import io
 
-def get_sha256_hash(file_bytes):
+
+def get_sha256_hash(file_bytes: bytes) -> str:
+    """Generate a SHA-256 hash for the provided file bytes."""
     return hashlib.sha256(file_bytes).hexdigest()
+
 
 def extract_exif(image: Image.Image) -> dict:
     """
-    Extract Exif metadata (JPEG) or info (PNG).
+    Extract EXIF metadata from supported image formats (JPEG, PNG).
     """
     try:
-        exif_data = image.info.get("exif")
-        if exif_data:
+        if "exif" in image.info:
+            exif_data = image.info["exif"]
             loaded_exif = piexif.load(exif_data)
-            if isinstance(loaded_exif, dict):
-                return loaded_exif
-            else:
-                return {"Error": "Invalid EXIF data."}
-        elif "png" in image.format.lower():
-            return {"PNG Info": image.info}
+            return loaded_exif if isinstance(loaded_exif, dict) else {"Error": "Invalid EXIF format."}
+
+        elif image.format == "PNG":
+            return {"PNG Info": {k: v for k, v in image.info.items() if isinstance(v, str)}}
+
+        elif image.format == "TIFF":
+            return {"TIFF Info": dict(image.tag.items()) if hasattr(image, "tag") else {}}
+
         else:
-            return {}
+            return {"Info": "No EXIF data found or unsupported format."}
+
     except Exception as e:
         return {"Error": str(e)}
 
+
 def format_metadata(raw_exif: dict) -> dict:
+    """
+    Format raw EXIF data with readable tag names.
+    """
     formatted = {}
+
     for ifd_name, tags in raw_exif.items():
         if not isinstance(tags, dict):
-            # If for some reason, tags are not a dict, we can't iterate .items()
-            # Let's create a placeholder to avoid crashing.
-            formatted[ifd_name] = {"Error": "Could not read metadata section."}
+            formatted[ifd_name] = {"Error": "Could not parse metadata section."}
             continue
 
         formatted_tags = {}
@@ -39,22 +48,42 @@ def format_metadata(raw_exif: dict) -> dict:
             try:
                 tag_name = piexif.TAGS[ifd_name][tag]["name"]
             except KeyError:
-                tag_name = str(tag)  # Use the tag itself if not found
+                tag_name = f"Unknown-{tag}"
 
             if isinstance(value, bytes):
                 value = value.decode(errors='ignore')
-            
+
             formatted_tags[tag_name] = value
-        
+
         formatted[ifd_name] = formatted_tags
+
     return formatted
+
 
 def strip_exif(image: Image.Image) -> io.BytesIO:
     """
-    Return an image with metadata stripped (clean version).
+    Strip EXIF metadata from an image and return cleaned image buffer.
     """
     clean_buffer = io.BytesIO()
-    format_to_use = image.format if image.format in ["JPEG", "PNG", "TIFF", "BMP", "WEBP"] else "JPEG"
-    image.save(clean_buffer, format=format_to_use, exif=b'' if format_to_use == "JPEG" else None)
-    clean_buffer.seek(0)
-    return clean_buffer
+    format_to_use = image.format.upper() if image.format else "JPEG"
+
+    # Force fallback for unknown formats
+    if format_to_use not in ["JPEG", "PNG", "TIFF", "BMP", "WEBP"]:
+        format_to_use = "JPEG"
+
+    # Strip logic
+    save_kwargs = {}
+
+    if format_to_use == "JPEG":
+        save_kwargs["exif"] = b""
+    elif format_to_use == "PNG":
+        save_kwargs["pnginfo"] = PngImagePlugin.PngInfo()
+    elif format_to_use == "TIFF":
+        save_kwargs["tiffinfo"] = TiffImagePlugin.ImageFileDirectory_v2()
+
+    try:
+        image.save(clean_buffer, format=format_to_use, **save_kwargs)
+        clean_buffer.seek(0)
+        return clean_buffer
+    except Exception as e:
+        raise RuntimeError(f"Failed to clean image: {str(e)}")
