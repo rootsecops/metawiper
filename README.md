@@ -94,12 +94,10 @@ metawiper/
 
 ## ⚒️ Tech Stack
 
-| Tool         | Description                           |
-| ------------ | ------------------------------------- |
-| 🐍 Python    | Backend scripting language            |
-| 🖼️ Pillow   | Image manipulation and format support |
-| 📸 piexif    | Extract/strip EXIF metadata           |
-| 🌐 Streamlit | Frontend UI for interactive web app   |
+* 🐍 **[Python](https://www.python.org/)** – Backend scripting language.  
+* 🖼️ **[Pillow](https://python-pillow.org/)** – Library for image manipulation and format support.  
+* 📸 **[piexif](https://pypi.org/project/piexif/)** – Extracts or strips EXIF metadata from images.  
+* 🌐 **[Streamlit](https://streamlit.io/)** – Frontend UI framework for building interactive web apps.
 
 ---
 
